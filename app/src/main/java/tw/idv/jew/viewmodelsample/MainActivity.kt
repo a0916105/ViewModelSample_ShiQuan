@@ -33,6 +33,6 @@ class MainActivity : AppCompatActivity() {
             println(list)
         }
 
-        viewModel.userListLiveData.value = listOf("Peter", "Jane")
+//        viewModel.userListLiveData.value = listOf("Peter", "Jane")
     }
 }
