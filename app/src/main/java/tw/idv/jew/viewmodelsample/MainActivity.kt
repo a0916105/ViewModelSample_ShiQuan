@@ -32,5 +32,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.userListLiveData.observe(this){   list ->
             println(list)
         }
+
+        viewModel.userListLiveData.value = listOf("Peter", "Jane")
     }
 }

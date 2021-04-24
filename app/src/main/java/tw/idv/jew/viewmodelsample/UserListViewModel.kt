@@ -9,7 +9,12 @@ class UserListViewModel() : ViewModel() {
 
 //    val userList = listOf("John", "Marry")
 //    val userList = userRepository.getUserInfo()
-    val userListLiveData = MutableLiveData(listOf("John", "Marry"))
+//    val userListLiveData = MutableLiveData(listOf("John", "Marry"))
+    val userListLiveData = MutableLiveData<List<String>>()
+
+    init {
+        userListLiveData.value = listOf("John", "Marry")
+    }
 
     /*class Factory(private val userRepository: UserRepository) : ViewModelProvider.Factory{
         @Suppress("UNCHECKED_CAST")
@@ -22,9 +27,9 @@ class UserListViewModel() : ViewModel() {
 // User 倉庫
 class UserRepository {
 
-    fun getUserInfo(): MutableLiveData<User> {
-        val user = MutableLiveData<User>()
-        user.value = User("張三","18")
+    fun getUserInfo(): MutableLiveData<List<String>> {
+        val user = MutableLiveData<List<String>>()
+        user.value = listOf("John", "Marry")
         return user
     }
 
@@ -39,6 +44,3 @@ class UserRepository {
             }
     }
 }
-
-// User 實體
-data class User(val name:String,val age:String)
