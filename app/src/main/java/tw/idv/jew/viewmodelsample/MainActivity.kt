@@ -7,15 +7,17 @@ import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
     //No factory
-    val viewModel by viewModels<UserListViewModel>()
+    private val viewModel by viewModels<UserListViewModel>()
 
     //With factory provided
-    lateinit var factory: UserListViewModel.Factory
-    val viewModelWithFactory by viewModels<UserListViewModel> { factory }
+    /*lateinit var factory: UserListViewModel.Factory
+    val viewModelWithFactory by viewModels<UserListViewModel> { factory }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_main)
+
+        lifecycle.addObserver(LocationObserver())
 
         //No factory
         /*val viewModel = ViewModelProvider(this)
@@ -26,5 +28,9 @@ class MainActivity : AppCompatActivity() {
         /*val viewModelWithFactory = ViewModelProvider(this, factory)
             .get(UserListViewModel::class.java)
         println(viewModelWithFactory.userList)*/
+
+        viewModel.userListLiveData.observe(this){   list ->
+            println(list)
+        }
     }
 }

@@ -4,15 +4,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-class UserListViewModel(private val userRepository: UserRepository) : ViewModel() {
-    val userList = userRepository.getUserInfo()
+class UserListViewModel() : ViewModel() {
+//class UserListViewModel(private val userRepository: UserRepository) : ViewModel() {
 
-    class Factory(private val userRepository: UserRepository) : ViewModelProvider.Factory{
+//    val userList = listOf("John", "Marry")
+//    val userList = userRepository.getUserInfo()
+    val userListLiveData = MutableLiveData(listOf("John", "Marry"))
+
+    /*class Factory(private val userRepository: UserRepository) : ViewModelProvider.Factory{
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return UserListViewModel(userRepository) as T
         }
-    }
+    }*/
 }
 
 // User 倉庫
