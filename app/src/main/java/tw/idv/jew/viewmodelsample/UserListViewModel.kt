@@ -12,7 +12,6 @@ class UserListViewModel(private val userRepository: UserRepository) : ViewModel(
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return UserListViewModel(userRepository) as T
         }
-
     }
 }
 
@@ -26,7 +25,6 @@ class UserRepository {
     }
 
     companion object {
-
         // For Singleton instantiation
         @Volatile
         private var instance: UserRepository? = null
