@@ -3,6 +3,9 @@ package tw.idv.jew.viewmodelsample
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
@@ -34,5 +37,22 @@ class MainActivity : AppCompatActivity() {
         }
 
 //        viewModel.userListLiveData.value = listOf("Peter", "Jane")
+
+        //Transformations
+        // map
+        val textLiveData = MutableLiveData<String>()
+        textLiveData.value = "Peter"
+        val lengthLiveData: LiveData<Int> = Transformations.map(textLiveData){ it.length }
+        //switchMap
+        val listLiveData: LiveData<List<String>> =
+            Transformations.switchMap(textLiveData) { fetch(it) }
+    }
+
+    val nameList = MutableLiveData<List<String>>()
+    val stringList = ArrayList<String>()
+    fun fetch(query: String): LiveData<List<String>>{
+        stringList.add("$query Wu")
+        nameList.value = stringList
+        return nameList
     }
 }
