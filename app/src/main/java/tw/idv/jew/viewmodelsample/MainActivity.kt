@@ -1,14 +1,21 @@
 package tw.idv.jew.viewmodelsample
 
+import android.content.pm.PackageManager
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
+    private var userAgreePermissionCode = 1
+
     //No factory
     private val viewModel by viewModels<UserListViewModel>()
 
@@ -18,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main)
 
         lifecycle.addObserver(LocationObserver())
 
@@ -46,6 +53,42 @@ class MainActivity : AppCompatActivity() {
         //switchMap
         val listLiveData: LiveData<List<String>> =
             Transformations.switchMap(textLiveData) { fetch(it) }
+
+        val locationLiveData = LocationLiveData(this)
+        //check permission before observe
+        val somePermission = arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION)
+        for (p in somePermission ){
+            if(ActivityCompat.checkSelfPermission(this, p) != PackageManager.PERMISSION_GRANTED)
+                ActivityCompat.requestPermissions(this, somePermission , userAgreePermissionCode)
+            break
+        }
+
+        locationLiveData.observe(this){ location ->
+            updateLocation(location)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            userAgreePermissionCode -> {
+                for( i in 0..(grantResults.size-1) ){
+                    if ((grantResults.isNotEmpty() && grantResults[i] == PackageManager.PERMISSION_GRANTED))
+                        Log.i("Status:", "Agree a permission")
+                    else
+                        finish()
+                }
+                return
+            }
+        }
+    }
+
+    private fun updateLocation(location: Location?) {
+        findViewById<TextView>(R.id.location).text = location.toString()
     }
 
     val nameList = MutableLiveData<List<String>>()
